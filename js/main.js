@@ -65,12 +65,68 @@ elForm.addEventListener('submit', (evt) => {
     render(arr, elList)
 });
 
+elBtnList.addEventListener('click', (evt) => {
+    if(evt.target.matches('.js-delete-btn')) {
+        let deletedTodoId = evt.target.dataset.id;
+        let deletedTodoIndex = arr.findIndex((item) => item.id == deletedTodoId);
+        arr.splice(deletedTodoIndex, 1);
+        render([...arr], elList);
+    }
+})
+
+
+
+
+
+// btn functions
+function btnfunc() {
+    elStrongAll.textContent = arr.length ? arr.length : 0;
+    
+    let family = arr.filter((item) => item.type == 'family');
+    elStrongFamily.textContent = family?.length ? family?.length : 0;
+    
+    let work = arr.filter((item) => item.type == 'work');
+    elStrongWork.textContent = work.length;
+    
+    let friends = arr.filter((item) => item.type == 'friends')
+    elStrongFriends.textContent = friends.length;
+}
+
+
+elAllBtn.addEventListener('click', () => {
+    render([...arr], elList)
+})
+elFamilyBtn.addEventListener('click', () => {
+    render([...arr.filter((item) => item.type == 'family')], elList)
+})
+elWorkBtn.addEventListener('click', () => {
+    render([...arr.filter((item) => item.type == 'work')], elList)
+})
+elFriendsBtn.addEventListener('click', () => {
+    render([...arr.filter((item) => item.type == 'friends')], elList)
+})
+
+elAZBtn.addEventListener('click', () => {
+    let sortAZ = arr.sort((a,b) => 
+    a.name.toLowerCase().charCodeAt() - b.name.toLowerCase().charCodeAt(),  
+    );
+    render([...arr], elList);
+})
+elZABtn.addEventListener('click', () => {
+    let sortedZA = arr.sort((a,b) => 
+    b.name.toLowerCase().charCodeAt() - a.name.toLowerCase().charCodeAt(),  
+    );
+    render([...arr], elList);
+})
+
+
 function render(array, node) {
     node.innerHTML = '';
+    btnfunc();
     array.forEach((item) => {
-        
         const liElement = document.createElement('li');
-        liElement.setAttribute('class', '');
+        liElement.setAttribute('class', 'border p-2');
+        
         
         const titleElement = document.createElement('h3');
         titleElement.setAttribute('class', '');
@@ -111,57 +167,3 @@ function render(array, node) {
         btnfunc();
     })
 };
-
-elBtnList.addEventListener('click', (evt) => {
-    if(evt.target.matches('.js-delete-btn')) {
-        let deletedTodoId = evt.target.dataset.id;
-        let deletedTodoIndex = arr.findIndex((item) => item.id == deletedTodoId);
-        arr.splice(deletedTodoIndex, 1);
-        render(arr, elList);
-    }
-})
-
-// btn functions
-function btnfunc() {
-    elStrongAll.textContent = arr.length;
-    
-    let family = arr.filter((item) => item.type == 'family');
-    elStrongFamily.textContent = family.length;
-    
-    let work = arr.filter((item) => item.type == 'work');
-    elStrongWork.textContent = work.length;
-    
-    let friends = arr.filter((item) => item.type == 'friends')
-    elStrongFriends.textContent = friends.length;
-}
-
-
-elAllBtn.addEventListener('click', () => {
-    render([...arr], elList)
-})
-elFamilyBtn.addEventListener('click', () => {
-    render([...arr.filter((item) => item.type == 'family')], elList)
-})
-elWorkBtn.addEventListener('click', () => {
-    render([...arr.filter((item) => item.type == 'work')], elList)
-})
-elFriendsBtn.addEventListener('click', () => {
-    render([...arr.filter((item) => item.type == 'friends')], elList)
-})
-
-elAZBtn.addEventListener('click', () => {
-    let sortAZ = arr.sort((a,b) => 
-    a.name.toLowerCase().charCodeAt() - b.name.toLowerCase().charCodeAt(),  
-    );
-    render([...arr], elList);
-})
-elZABtn.addEventListener('click', () => {
-    let sortedZA = arr.sort((a,b) => 
-    b.name.toLowerCase().charCodeAt() - a.name.toLowerCase().charCodeAt(),  
-    );
-    render([...arr], elList);
-})// ... (your existing code)
-
-
-
-// ... (your existing code)
