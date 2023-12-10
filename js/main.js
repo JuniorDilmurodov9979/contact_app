@@ -3,6 +3,8 @@ const elName = document.querySelector('.js-name');
 const elNumber = document.querySelector('.js-tel');
 const elSelect = document.querySelector('.js-select');
 const elList = document.querySelector('.list');
+const elBtnList = document.querySelector('.js-btn-list');
+
 // btns 
 const elAllBtn = document.querySelector('.all');
 const elFamilyBtn = document.querySelector('.family');
@@ -18,11 +20,10 @@ const elStrongWork = document.querySelector('.work-strong');
 const elStrongFamily = document.querySelector('.family-strong');
 const elStrongFriends = document.querySelector('.friends-strong');
 
-// --- -----  ---
-
 const letters = /^[a-zA-Z]+$/;
-
+let plus = 1;
 let arr = [];
+
 elForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     let valueName = elName.value.trim();
@@ -59,6 +60,7 @@ elForm.addEventListener('submit', (evt) => {
     arr.push({name: valueName,
         number: numberValue,
         type: selectValue,
+        id: arr.length ? arr.at(-1).id + 1 : 1,
     })
     render(arr, elList)
 });
@@ -79,6 +81,7 @@ function render(array, node) {
         telElement.textContent = `${item.number}`;
         telElement.setAttribute('href', item.number);
         
+        
         const typeELement = document.createElement('button');
         typeELement.setAttribute('class', 'btn btn-outline-success');
         typeELement.textContent = item.type;
@@ -90,14 +93,17 @@ function render(array, node) {
         wrapSecondElement.setAttribute('class', 'wrapSecond');
         wrapSecondElement.append(titleElement,telElement);
         
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('border', 'btn', 'btn-danger', 'js-delete-btn')
+        deleteBtn.dataset.id = item.id;
+        console.log(deleteBtn);
+        deleteBtn.textContent = `Delete`;
         
+        const btnWrapper = document.createElement('div');
+        btnWrapper.classList.add('d-flex','gap-2')
         
-        
-        
-        // addNumber();
-        
-        
-        wrapElement.append(wrapSecondElement,typeELement);
+        btnWrapper.append(typeELement, deleteBtn);
+        wrapElement.append(wrapSecondElement,btnWrapper);
         liElement.append(wrapElement);
         
         node.appendChild(liElement)
@@ -105,8 +111,15 @@ function render(array, node) {
         btnfunc();
     })
 };
-render(arr, elList)
 
+elBtnList.addEventListener('click', (evt) => {
+    if(evt.target.matches('.js-delete-btn')) {
+        let deletedTodoId = evt.target.dataset.id;
+        let deletedTodoIndex = arr.findIndex((item) => item.id == deletedTodoId);
+        arr.splice(deletedTodoIndex, 1);
+        render(arr, elList);
+    }
+})
 
 // btn functions
 function btnfunc() {
@@ -120,8 +133,8 @@ function btnfunc() {
     
     let friends = arr.filter((item) => item.type == 'friends')
     elStrongFriends.textContent = friends.length;
-    
 }
+
 
 elAllBtn.addEventListener('click', () => {
     render([...arr], elList)
@@ -147,4 +160,8 @@ elZABtn.addEventListener('click', () => {
     b.name.toLowerCase().charCodeAt() - a.name.toLowerCase().charCodeAt(),  
     );
     render([...arr], elList);
-})
+})// ... (your existing code)
+
+
+
+// ... (your existing code)
